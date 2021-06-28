@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken");
 const { user, product, order, levelinfo, cafeinfo, badgeinfo, badge } = require("../models"); 
 
 module.exports = {
-  signinController: async (req, res) => {
+  loginController: async (req, res) => {
     const { email, password } = req.body;
     if (!email || !password) {
       return res
@@ -14,22 +14,22 @@ module.exports = {
         .send({ message: "이메일이나 비밀번호를 확인하세요." });
     }
 
-    const signInUser = await user.findOne({
+    const loginUser = await user.findOne({
       where: { email, password },
     });
-    if (!signInUser) {
+    if (!loginUser) {
       return res.status(404).send({ message: "일치하는 유저가 없습니다." });
     }
 
     const accessToken = jwt.sign(
-      { id: signInUser.id, email: signInUser.email },
+      { id: loginUser.id, email: loginUser.email },
       process.env.ACCESS_SECRET,
       {
         expiresIn: "1h",
       }
     );
     const refreshToken = jwt.sign(
-      { id: signInUser.id, email: signInUser.email },
+      { id: loginUser.id, email: loginUser.email },
       process.env.REFRESH_SECRET,
       {
         expiresIn: "30d",
@@ -59,11 +59,42 @@ module.exports = {
     }
   },
 
-  googlesigninController: async (req, res) => {
+  googleloginController: async (req, res) => {
 
+    //클라이언트에서 response.profileObject의 내용 중 해당하는 부분만 주면
+    const { username, email } = req.body;  // username은 email의 앞부분
+    const googleToken = req.headers.authorization.split(' ')[1];
+
+    // db에 저장되어 있는지 조회
+    const googleInfo = await user.findOne({ 
+      where: {
+        username: username,
+        email: email,
+      }
+    })
+    //저장되어 있지 않다면 데이터를 users 테이블에 저장
+    if(googleInfo && googleToken){
+      res.status(200).send({googleToken, googleInfo})
+    } else if(!googleInfo){  
+      const createInfo = await user.create({
+        username: username,
+        email: email,
+      }) 
+      res.status(200).send(createInfo) 
+    } else {
+      res.status(500).send('err')
+    } 
   },
   
   googlesignupController: async (req, res) => {
+
+  },
+
+  kakaologinController: async (req, res) => {
+
+  },
+
+  kakaosignupController: async (req, res) => {
 
   },
 };
