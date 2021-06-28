@@ -2,7 +2,7 @@ const router = require('express').Router();
 const controller = require('../controllers/level');
 
  
-router.get('/read', controller.readController);
+router.post('/read', controller.readController);
 
 
 module.exports = router;
