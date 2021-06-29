@@ -10,13 +10,14 @@ module.exports = {
     infoController: async (req, res) => {
         // 상품을 클릭했을 때 상품의 자세한 정보를 보여주는 페이지
         // req.params로 보내주는게 나을까...그러면 api를 /product/info/:id 로..
-        const selectedProduct = product.findByPk(req.params.id)
+        // 아니면 그냥 req.body로..
+        const selectedProduct = await product.findByPk(req.params.id)
         res.status(200).send(selectedProduct)
     },    
 
     listController: async (req, res) => {
         //상품 전체 목록을 보여줌
-        const getInfo = product.findAll({
+        const getInfo = await product.findAll({
             attributes: ['id', 'name', 'image', 'description','price']
         })
         res.status(200).send(getInfo)
