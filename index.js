@@ -57,6 +57,6 @@ if (fs.existsSync("./key.pem") && fs.existsSync("./cert.pem")) {
 } else {
   server = app.listen(4000)
 }
-console.log(`🚀server listening on ${port}`)
+console.log(`🚀server listening on https && ${port}`)
 
 module.exports = server;
