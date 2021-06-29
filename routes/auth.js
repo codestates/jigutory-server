@@ -1,5 +1,5 @@
-const router = require('express').Router();
-const controller = require('../controllers/auth');
+const router = require('express').Router()
+const controller = require('../controllers/auth')
 
  
 router.post('/login', controller.loginController);
@@ -10,4 +10,4 @@ router.post('/kakaologin', controller.kakaologinController);
 router.post('/kakaosignup', controller.kakaosignupController);
 
 
-module.exports = router;
+module.exports = router

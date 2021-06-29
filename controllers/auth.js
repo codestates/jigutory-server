@@ -1,11 +1,20 @@
-const { Op } = require("sequelize");
-const { QueryTypes } = require('sequelize');
-const db = require('../models/index');
-require("dotenv").config();
-const jwt = require("jsonwebtoken");
-const { user, product, order, levelinfo, cafeinfo, badgeinfo, badge } = require("../models"); 
+const { Op } = require('sequelize')
+const { QueryTypes } = require('sequelize')
+const db = require('../models/index')
+require('dotenv').config()
+const jwt = require('jsonwebtoken')
+const {
+    user,
+    product,
+    order,
+    levelinfo,
+    cafeinfo,
+    badgeinfo,
+    badge,
+} = require('../models')
 
 module.exports = {
+
   loginController: async (req, res) => {
     const { email, password } = req.body;
     if (!email || !password) {
@@ -41,23 +50,29 @@ module.exports = {
     });
   },
 
-  signupController: async (req, res) => {
-    const { username, email, password } = req.body;
-    if (!username || !email || !password) {
-      return res.status(400).send({ message: "회원정보를 모두 입력하세요." });
-    }
 
-    const [signUpUser, created] = await user.findOrCreate({
-      where: { email },
-      defaults: { username, email, password },
-    });
+    signupController: async (req, res) => {
+        const { username, email, password } = req.body
+        if (!username || !email || !password) {
+            return res
+                .status(400)
+                .send({ message: '회원정보를 모두 입력하세요.' })
+        }
 
-    if (!created) {
-      return res.status(409).send({ message: "이미 존재하는 이메일입니다." });
-    } else {
-      return res.status(201).send(signUpUser);
-    }
-  },
+        const [signUpUser, created] = await user.findOrCreate({
+            where: { email },
+            defaults: { username, email, password },
+        })
+
+        if (!created) {
+            return res
+                .status(409)
+                .send({ message: '이미 존재하는 이메일입니다.' })
+        } else {
+            return res.status(201).send(signUpUser)
+        }
+    },
+
 
   googleloginController: async (req, res) => {
 
@@ -98,3 +113,4 @@ module.exports = {
 
   },
 };
+
