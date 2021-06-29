@@ -60,6 +60,7 @@ module.exports = {
                 .send({ message: '회원정보를 모두 입력하세요.' })
         }
 
+
         const [signUpUser, created] = await user.findOrCreate({
             where: { email },
             defaults: { username, email, password },
@@ -73,6 +74,7 @@ module.exports = {
             return res.status(201).send(signUpUser)
         }
     },
+
 
   googleloginController: async (req, res) => {
 
@@ -113,3 +115,4 @@ module.exports = {
 
   },
 };
+

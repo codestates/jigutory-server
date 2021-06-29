@@ -11,8 +11,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      user.belongsToMany(models.badge, {
-        through: 'user_badge'
+      user.hasOne(models.badge, {
+        as: 'member'
       })
       user.hasMany(models.order, {
         foreignKey: 'userId'
