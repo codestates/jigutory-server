@@ -14,6 +14,7 @@ const {
 } = require('../models')
 
 module.exports = {
+
     loginController: async (req, res) => {
         const { email, password } = req.body
         if (!email || !password) {
@@ -73,7 +74,42 @@ module.exports = {
         }
     },
 
-    googleloginController: async (req, res) => {},
+  googleloginController: async (req, res) => {
 
-    googlesignupController: async (req, res) => {},
-}
+    //클라이언트에서 response.profileObject의 내용 중 해당하는 부분만 주면
+    const { username, email } = req.body;  // username은 email의 앞부분
+    const googleToken = req.headers.authorization.split(' ')[1];
+
+    // db에 저장되어 있는지 조회
+    const googleInfo = await user.findOne({ 
+      where: {
+        username: username,
+        email: email,
+      }
+    })
+    //저장되어 있지 않다면 데이터를 users 테이블에 저장
+    if(googleInfo && googleToken){
+      res.status(200).send({googleToken, googleInfo})
+    } else if(!googleInfo){  
+      const createInfo = await user.create({
+        username: username,
+        email: email,
+      }) 
+      res.status(200).send(createInfo) 
+    } else {
+      res.status(500).send('err')
+    } 
+  },
+  
+  googlesignupController: async (req, res) => {
+
+  },
+
+  kakaologinController: async (req, res) => {
+
+  },
+
+  kakaosignupController: async (req, res) => {
+
+  },
+};

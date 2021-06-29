@@ -13,8 +13,18 @@ module.exports = {
       const userInfo = await user.findOne({
         where: { id: req.currentUserId },
       });
+      // const levelInfo = await levelinfo.findOne({
+      //   where: {
+      //     id: 1
+      //   }
+      // })
       return res.status(200).send(userInfo);
+      //return res.status(200).send({ userInfo, levelInfo });
     }
+    // userInfo 정보 전달할 때 레벨의 첫단계도 전달해야 하는가
+    // 회원가입하자마자 레벨은 1단계 적용할 필요 (아무것도 없을 수는 없으니까)
+
+
   },
 
   profileImageController: async (req, res) => {
@@ -46,5 +56,21 @@ module.exports = {
       }
     );
     return res.status(200).send(userInfo);
+  },
+
+  passwordController: async (req, res) => {
+
+  },
+
+  withdrawController: async (req, res) => {
+
+  },
+
+  googlewithdrawController: async (req, res) => {
+
+  },
+
+  kakaowithdrawController: async (req, res) => {
+
   },
 };
