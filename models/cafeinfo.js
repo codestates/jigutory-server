@@ -16,6 +16,9 @@ module.exports = (sequelize, DataTypes) => {
   cafeinfo.init({
     name: DataTypes.STRING,
     image: DataTypes.STRING,
+    keyword: DataTypes.STRING,
+    latitude: DataTypes.INTEGER,
+    longitude : DataTypes.INTEGER,
     description: DataTypes.STRING
   }, {
     sequelize,

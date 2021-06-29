@@ -5,6 +5,12 @@ require("dotenv").config();
 const jwt = require("jsonwebtoken");
 const { user, product, order, levelinfo, cafeinfo, badgeinfo, badge } = require("../models"); 
 
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID
+const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
+const SERVER_ROOT_URI = 'http://localhost:4000'
+const CLIENT_ROOT_URI = 'http://localhost:3000/user/signin'
+const REDIRECT_URI = '/auth/googlesignin'
+
 module.exports = {
   signinController: async (req, res) => {
     const { email, password } = req.body;
@@ -60,10 +66,18 @@ module.exports = {
   },
 
   googlesigninController: async (req, res) => {
-
-  },
-  
-  googlesignupController: async (req, res) => {
-
+    const rootUrl = 'https://accounts.google.com/o/oauth2/v2/auth'
+    const options = {
+      redirect_uri: `${SERVER_ROOT_URI}/${REDIRECT_URI}`,
+      client_id: GOOGLE_CLIENT_ID,
+      access_type: 'offline',
+      response_type: 'code',
+      prompt: 'consent',
+      scope: [
+        'https://www.googleapis.com/auth/userinfo.profile',
+        'https://www.googleapis.com/auth/userinfo.email'
+      ].join(' ')
+    }
+    return res.send(`${rootUrl}?${querystring.stringify(options)}`)
   },
 };
