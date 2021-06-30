@@ -8,13 +8,30 @@ const { user, product, order, levelinfo, cafeinfo, badgeinfo, badge } = require(
 module.exports = {
 
     readController: async (req, res) => {
-    // 나의 장바구니 목록을 보는 코드 -> product_order 테이블 사용
-
+    // 나의 장바구니 목록을 보는 코드 
+        const { username } = req.body
+        const findOrderUser = await user.findOne({
+            where: {
+                username: username
+            }
+        })
+        const showCart = await order.findAll({
+            attributes: ['id', 'userId', 'location', 'message', 'totalPrice'],
+            include: {
+                model: product,
+                attributes: ['id', 'name', 'image', 'description', 'price']
+            },
+            where: {
+                userId: findOrderUser.dataValues.id
+            },
+            through: 'order_product'
+        })
+        res.status(200).send(showCart)
     },    
 
     updateController: async (req, res) => {
     // 상품을 선택하고 거기서 장바구니 담기 버튼을 클릭 시 장바구니에 담는 코드
-    // 장바구니 클릭하는 유저정보 및 상품 정보를 req.body로 전달
+    // 장바구니 클릭하는 유저정보는 req.body, 상품 정보를 req.params로 전달
         const { username } = req.body
         const findOrderUser = await user.findOne({
             where: {
@@ -28,14 +45,13 @@ module.exports = {
             message: null,
             totalPrice: null
         })
-        const addProductOrder = await db.sequelize.query(
-            `Insert into product_order (productId, orderId) values(?,?)`, {
-                replacements: [findProduct.dataValues.id, addOrder.dataValues.id],
+        await db.sequelize.query(
+            `Insert into order_product (orderId, productId) values(?,?)`, {
+                replacements: [addOrder.dataValues.id, findProduct.dataValues.id],
                 type: QueryTypes.INSERT
             }
         )
-        
-
+        res.status(200).send('success')
     },
 
     deleteController: async (req, res) => {
