@@ -11,6 +11,7 @@ const levelRouter = require('./routes/level')
 const productRouter = require('./routes/product')
 const cartRouter = require('./routes/cart')
 const orderRouter = require('./routes/order');
+const cafeRouter = require('./routes/cafe')
 
 require("./models");
 const sequelize = require('./models').sequelize;
@@ -35,6 +36,7 @@ app.use('/level', levelRouter);
 app.use('/product', productRouter);
 app.use('/cart', cartRouter);
 app.use('/order', orderRouter);
+app.use('/cafe', cafeRouter)
 
 // module.exports = app.listen(port, () => {
 //   console.log(`🚀 Server is starting on ${port}`);
