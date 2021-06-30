@@ -47,9 +47,9 @@ module.exports = {
     const { username, profileImage, statusMessage } = req.body;
     const userInfo = await user.update(
       {
+        userId : req.currentUserId,
         username,
         profileImage,
-        statusMessage,
       },
       {
         where: { id: req.currentUserId },
@@ -58,19 +58,28 @@ module.exports = {
     return res.status(200).send(userInfo);
   },
 
-  passwordController: async (req, res) => {
-
+  passwordController : async (req,res)  => {
+    const { rvsdpassword } = req.body;
+    const editPassword = await user.update(
+      {
+        password:rvsdpassword
+      },
+      {
+        where: { id:req.currentUserId }
+      }
+    );
+    return res.status(200).send(editPassword)
   },
 
   withdrawController: async (req, res) => {
+    if (!req.currentUserId) {
+      return res.status(403).send({ message: "존재하지 않는 유저라 탈퇴 할 수 없습니다." });
+    } else {
+      const withdrawUser = await user.destroy({
+        where: { id: req.currentUserId },
+      });
+      return res.status(200).send({message: '탈퇴가 완료 되었습니다.'});
+    }
+  }
 
-  },
-
-  googlewithdrawController: async (req, res) => {
-
-  },
-
-  kakaowithdrawController: async (req, res) => {
-
-  },
 };
