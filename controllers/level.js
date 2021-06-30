@@ -21,14 +21,18 @@ module.exports = {
                   username: username
                 }
             })
+
             //console.log(findUser.dataValues.id)
+
             const submitBadge = await badge.create({
                 clickNum: clickNum + 1,
                 carbonReduction: carbon(clickNum + 1),
                 badgeinfo: null,
                 userId: findUser.dataValues.id // 클릭한 유저의 id를 badesg userId 외래키로 넣어서 관계 연결
             })
+
             //console.log(submitBadge.dataValues.id)
+
   
             // const submitUserBadge = await db.sequelize.query(
             //     `Insert into user_badge (userId, badgeId) values(?,?)`, {
@@ -95,14 +99,18 @@ module.exports = {
                 }
             })
             console.log(getUpdateInfo)
+
             const levelStandard = getUpdateInfo.dataValues.clickNum;
+
             //const badgeStandard = getUpdateInfo.carbonReduction;
 
             // 클릭 수에 따라 조건에 맞는 레벨 정보를 조회해서 전송
             // 레벨 1은 기본값으로 클라에서 저장
+
             if(levelStandard <= 10){
                 res.status(200).send(getUpdateInfo)
             } else if(levelStandard > 10 && levelStandard <= 15){
+
                 const levelTwo = await levelinfo.findOne({
                     where: { id: 2}
                 })

@@ -57,6 +57,7 @@ module.exports = {
     );
     return res.status(200).send(userInfo);
   },
+
   passwordController : async (req,res)  => {
     const { rvsdpassword } = req.body;
     const editPassword = await user.update(
@@ -80,4 +81,5 @@ module.exports = {
       return res.status(200).send({message: '탈퇴가 완료 되었습니다.'});
     }
   }
+
 };

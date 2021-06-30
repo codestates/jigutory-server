@@ -14,6 +14,7 @@ module.exports = {
 
     updateController: async (req, res) => {
     // 상품을 선택하고 거기서 장바구니 담기 버튼을 클릭 시 장바구니에 담는 코드
+
     // 장바구니 클릭하는 유저정보 및 상품 정보를 req.body로 전달
         const { username } = req.body
         const findOrderUser = await user.findOne({
@@ -34,7 +35,6 @@ module.exports = {
                 type: QueryTypes.INSERT
             }
         )
-        
 
     },
 
