@@ -1,5 +1,6 @@
-const router = require('express').Router();
-const controller = require('../controllers/auth');
+const router = require('express').Router()
+const controller = require('../controllers/auth')
+
 
  
 router.get('/signin', controller.loginController);
@@ -8,3 +9,4 @@ router.post('/googlesignin', controller.googleloginController);
 // router.post('/kakaosignin', controller.kakaosigninController);
 
 module.exports = router;
+
