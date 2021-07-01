@@ -3,7 +3,7 @@ const controller = require('../controllers/cart');
 
  
 router.get('/read', controller.readController);
-router.patch('/update', controller.updateController);
+router.post('/update', controller.updateController);
 router.get('/delete', controller.deleteController);
 
 
