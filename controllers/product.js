@@ -7,7 +7,7 @@ const { user, product, order, levelinfo, cafeinfo, badgeinfo, badge } = require(
 
 module.exports = {
 
-    infoController: async (req, res) => {
+      infoController: async (req, res) => {
         // 상품을 클릭했을 때 상품의 자세한 정보를 보여주는 페이지
         // req.params로 보내주는게 나을까...그러면 api를 /product/info/:id 로..
         // 아니면 그냥 req.body로..
