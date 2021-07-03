@@ -1,4 +1,5 @@
 'use strict';
+const { STRING } = require('sequelize');
 const {
   Model
 } = require('sequelize');
@@ -17,9 +18,12 @@ module.exports = (sequelize, DataTypes) => {
     name: DataTypes.STRING,
     image: DataTypes.STRING,
     keyword: DataTypes.STRING,
-    latitude: DataTypes.INTEGER,
-    longitude : DataTypes.INTEGER,
-    description: DataTypes.STRING
+    latitude: DataTypes.DOUBLE,
+    longitude : DataTypes.DOUBLE,
+    address: DataTypes.STRING,
+    type:DataTypes.STRING,
+    telephone:DataTypes.STRING,
+    etc:DataTypes.STRING
   }, {
     sequelize,
     modelName: 'cafeinfo',
