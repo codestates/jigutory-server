@@ -14,13 +14,12 @@ const {
 } = require('../models')
 
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID
-const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
+const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET
 const SERVER_ROOT_URI = 'http://localhost:4000'
 const CLIENT_ROOT_URI = 'http://localhost:3000/user/signin'
 const REDIRECT_URI = '/auth/googlesignin'
 
 module.exports = {
-
     loginController: async (req, res) => {
         const { email, password } = req.body
         if (!email || !password) {
@@ -66,7 +65,6 @@ module.exports = {
                 .send({ message: '회원정보를 모두 입력하세요.' })
         }
 
-
         const [signUpUser, created] = await user.findOrCreate({
             where: { email },
             defaults: { username, email, password },
@@ -81,52 +79,46 @@ module.exports = {
         }
     },
 
+    googleloginController: async (req, res) => {
+        //클라이언트에서 response.profileObject의 내용 중 해당하는 부분만 주면
+        const { email } = req.body // username은 email의 앞부분
+        // const googleToken = req.headers.authorization.split(' ')[0];
+        // db에 저장되어 있는지 조회
+        const googleInfo = await user.findOne({
+            where: {
+                email: req.body.email,
+            },
+        })
+        //저장되어 있지 않다면 데이터를 users 테이블에 저장
+        if (googleInfo) {
+            res.status(200).send({ googleToken, googleInfo })
+        } else if (!googleInfo) {
+            const createInfo = await user.create({
+                username: username,
+                email: email,
+            })
+            res.status(200).send(createInfo)
+        } else {
+            res.status(500).send('err')
+        }
+    },
 
-  googleloginController: async (req, res) => {
-
-    //클라이언트에서 response.profileObject의 내용 중 해당하는 부분만 주면
-    const { email } = req.body;  // username은 email의 앞부분
-    // const googleToken = req.headers.authorization.split(' ')[0];
-    // db에 저장되어 있는지 조회
-    const googleInfo = await user.findOne({ 
-      where: {
-        email: req.body.email,
-      }
-    })
-    //저장되어 있지 않다면 데이터를 users 테이블에 저장
-    if(googleInfo){
-      res.status(200).send({googleToken, googleInfo})
-    } else if(!googleInfo){  
-      const createInfo = await user.create({
-        username: username,
-        email: email,
-      }) 
-      res.status(200).send(createInfo) 
-    } else {
-      res.status(500).send('err')
-    } 
-  },
-  
-  googlesignUpController: async (req, res) => {
-    const { email, username } = req.body;
-    const googleUserInfo = await user.findOne({
-      where: {
-        email : req.body.email,
-      }
-    })
-    //만약에 userinfo에 해당 이메일 주소가 없다면,
-    if(!googleUserInfo){
-      const createUser = await user.create({
-        email : email,
-        username: username,
-      })
-      res.status(200).send(createUser)
-    }
-    else{
-      res.status(500).send({message : "이미 가입된 유저입니다."})
-    }
-
-  },
-};
-
-
+    googlesignUpController: async (req, res) => {
+        const { email, username } = req.body
+        const googleUserInfo = await user.findOne({
+            where: {
+                email: req.body.email,
+            },
+        })
+        //만약에 userinfo에 해당 이메일 주소가 없다면,
+        if (!googleUserInfo) {
+            const createUser = await user.create({
+                email: email,
+                username: username,
+            })
+            res.status(200).send(createUser)
+        } else {
+            res.status(500).send({ message: '이미 가입된 유저입니다.' })
+        }
+    },
+}
