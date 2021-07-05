@@ -85,8 +85,8 @@ module.exports = {
   googleloginController: async (req, res) => {
 
     //클라이언트에서 response.profileObject의 내용 중 해당하는 부분만 주면
-    const { email } = req.body;  // username은 email의 앞부분
-    // const googleToken = req.headers.authorization.split(' ')[0];
+    const { email , username } = req.body;  // username은 email의 앞부분
+    const googleToken = req.headers.authorization.split(' ')[0];
     // db에 저장되어 있는지 조회
     const googleInfo = await user.findOne({ 
       where: {
@@ -95,13 +95,47 @@ module.exports = {
     })
     //저장되어 있지 않다면 데이터를 users 테이블에 저장
     if(googleInfo){
-      res.status(200).send({googleToken, googleInfo})
+
+      const accessTokenGoogle = jwt.sign(
+        { id: googleInfo.id, email: googleInfo.email },
+        process.env.ACCESS_SECRET,
+        {
+            expiresIn: '1h',
+        },
+    )
+    const refreshTokenGoogle = jwt.sign(
+        { id: googleInfo.id, email: googleInfo.email },
+        process.env.REFRESH_SECRET,
+        {
+            expiresIn: '30d',
+        },
+    )
+
+      res.status(200).send({accessTokenGoogle,refreshTokenGoogle, googleInfo})
     } else if(!googleInfo){  
       const createInfo = await user.create({
         username: username,
         email: email,
       }) 
-      res.status(200).send(createInfo) 
+
+      const accessTokenGoogle = jwt.sign(
+        { id: createInfo.id, email: createInfo.email },
+        process.env.ACCESS_SECRET,
+        {
+            expiresIn: '1h',
+        },
+    )
+    const refreshTokenGoogle = jwt.sign(
+        { id: createInfo.id, email: createInfo.email },
+        process.env.REFRESH_SECRET,
+        {
+            expiresIn: '30d',
+        },
+    )
+    return res.status(200).send({
+        data: { createInfo, accessToken: accessTokenGoogle, refreshToken: refreshTokenGoogle },
+        message: '구글로그인 되었습니다.',
+    })
     } else {
       res.status(500).send('err')
     } 

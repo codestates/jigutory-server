@@ -23,7 +23,8 @@ module.exports = (sequelize, DataTypes) => {
     address: DataTypes.STRING,
     type:DataTypes.STRING,
     telephone:DataTypes.STRING,
-    etc:DataTypes.STRING
+    etc:DataTypes.STRING,
+    link:DataTypes.STRING,
   }, {
     sequelize,
     modelName: 'cafeinfo',
