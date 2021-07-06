@@ -15,13 +15,12 @@ const {
 const e = require('express')
 
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID
-const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
-const SERVER_ROOT_URI = 'https://localhost:4000'
-const CLIENT_ROOT_URI = 'https://localhost:3000/user/signin'
+const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET
+const SERVER_ROOT_URI = 'http://localhost:4000'
+const CLIENT_ROOT_URI = 'http://localhost:3000/user/signin'
 const REDIRECT_URI = '/auth/googlesignin'
 
 module.exports = {
-
     loginController: async (req, res) => {
         const { email, password } = req.body
         if (!email || !password) {
@@ -65,7 +64,6 @@ module.exports = {
                 .send({ message: '회원정보를 모두 입력하세요.' })
         }
 
-
         const [signUpUser, created] = await user.findOrCreate({
             where: { email },
             defaults: { username, email, password },
@@ -77,6 +75,30 @@ module.exports = {
                 .send({ message: '이미 존재하는 이메일입니다.' })
         } else {
             return res.status(201).send(signUpUser)
+        }
+    },
+
+    googleloginController: async (req, res) => {
+        //클라이언트에서 response.profileObject의 내용 중 해당하는 부분만 주면
+        const { email } = req.body // username은 email의 앞부분
+        // const googleToken = req.headers.authorization.split(' ')[0];
+        // db에 저장되어 있는지 조회
+        const googleInfo = await user.findOne({
+            where: {
+                email: req.body.email,
+            },
+        })
+        //저장되어 있지 않다면 데이터를 users 테이블에 저장
+        if (googleInfo) {
+            res.status(200).send({ googleToken, googleInfo })
+        } else if (!googleInfo) {
+            const createInfo = await user.create({
+                username: username,
+                email: email,
+            })
+            res.status(200).send(createInfo)
+        } else {
+            res.status(500).send('err')
         }
     },
 

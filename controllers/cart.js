@@ -1,13 +1,20 @@
-const { Op } = require("sequelize");
-const { QueryTypes } = require('sequelize');
-const db = require('../models/index');
-require("dotenv").config();
-const { user, product, order, levelinfo, cafeinfo, badgeinfo, badge } = require("../models");
-
+const { Op } = require('sequelize')
+const { QueryTypes } = require('sequelize')
+const db = require('../models/index')
+require('dotenv').config()
+const {
+    user,
+    product,
+    order,
+    levelinfo,
+    cafeinfo,
+    badgeinfo,
+    badge,
+} = require('../models')
 
 module.exports = {
-
     readController: async (req, res) => {
+
     //장바구니 이동 버튼 클릭 시 나의 장바구니 목록을 보는 코드 
         const { email } = req.body
         const findOrderUser = await user.findOne({
@@ -71,6 +78,6 @@ module.exports = {
             }
         })
         res.status(200).send('장바구니에서 삭제되었습니다')
-    },
 
-}    
+    },
+}

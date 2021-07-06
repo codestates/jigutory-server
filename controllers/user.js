@@ -1,11 +1,19 @@
-const { Op } = require("sequelize");
-const { QueryTypes } = require('sequelize');
-const db = require('../models/index');
-require("dotenv").config();
-const { user, product, order, levelinfo, cafeinfo, badgeinfo, badge } = require("../models");
-
+const { Op } = require('sequelize')
+const { QueryTypes } = require('sequelize')
+const db = require('../models/index')
+require('dotenv').config()
+const {
+    user,
+    product,
+    order,
+    levelinfo,
+    cafeinfo,
+    badgeinfo,
+    badge,
+} = require('../models')
 
 module.exports = {
+
   userinfoController: async (req, res) => {
       if (!req.currentUserId) {
           return res
@@ -83,4 +91,5 @@ module.exports = {
           return res.status(200).send({ message: '탈퇴가 완료 되었습니다.' })
       }
   },
+
 }
