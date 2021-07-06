@@ -12,6 +12,7 @@ const {
     badgeinfo,
     badge,
 } = require('../models')
+const e = require('express')
 
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
@@ -28,7 +29,6 @@ module.exports = {
                 .status(400)
                 .send({ message: '이메일이나 비밀번호를 확인하세요.' })
         }
-
         const loginUser = await user.findOne({
             where: { email, password },
         })
@@ -37,7 +37,6 @@ module.exports = {
                 .status(404)
                 .send({ message: '일치하는 유저가 없습니다.' })
         }
-
         const accessToken = jwt.sign(
             { id: loginUser.id, email: loginUser.email },
             process.env.ACCESS_SECRET,
@@ -86,32 +85,83 @@ module.exports = {
 
     //클라이언트에서 response.profileObject의 내용 중 해당하는 부분만 주면
     const { username, email } = req.body;  // username은 email의 앞부분
-    const googleToken = req.headers.authorization.split(' ')[1];
+    const googleToken = req.headers.authorization;
 
     // db에 저장되어 있는지 조회
-    const googleInfo = await user.findOne({ 
-      where: {
-        username: username,
-        email: email,
-      }
-    })
-    //저장되어 있지 않다면 데이터를 users 테이블에 저장
-    if(googleInfo && googleToken){
-      res.status(200).send({googleToken, googleInfo})
-    } else if(!googleInfo){  
-      const createInfo = await user.create({
-        username: username,
-        email: email,
-      }) 
-      res.status(200).send(createInfo) 
-    } else {
-      res.status(500).send('err')
-    } 
+    if(googleToken){
+        const googleInfo = await user.findOne({ 
+            where: {
+                username: username,
+                email: email,
+            }
+        })
+        if(!googleInfo){
+            const createInfo = await user.create({
+                username: username,
+                email: email,
+                password: email+process.env.GOOGLE_CLIENT_SECRET
+            }) 
+            const accessToken = jwt.sign(
+                { id: createInfo.id, email: createInfo.email },
+                process.env.ACCESS_SECRET,
+                {
+                    expiresIn: '1h',
+                },
+            )
+            const refreshToken = jwt.sign(
+                { id: createInfo.id, email: createInfo.email },
+                process.env.REFRESH_SECRET,
+                {
+                    expiresIn: '30d',
+                },
+            )
+            return res.status(200).send({
+                data: { accessToken: accessToken, refreshToken: refreshToken },
+                message: '로그인 되었습니다.',
+            })
+        } else if(googleInfo){
+            const accessToken = jwt.sign(
+                { id: googleInfo.id, email: googleInfo.email },
+                process.env.ACCESS_SECRET,
+                {
+                    expiresIn: '1h',
+                },
+            )
+            const refreshToken = jwt.sign(
+                { id: googleInfo.id, email: googleInfo.email },
+                process.env.REFRESH_SECRET,
+                {
+                    expiresIn: '30d',
+                },
+            )
+            res.status(200).send({
+                data: { accessToken: accessToken, refreshToken: refreshToken },
+                message: '로그인 되었습니다.',
+            })
+        }
+    } else if(!googleToken){
+        res.status(500).send('구글 사용자가 아닙니다')
+    }    
   },
   
-  // googlesignupController: async (req, res) => {
-
-  // },
+   googlesignUpController: async (req, res) => {
+      const { email, username } = req.body
+      const googleUserInfo = await user.findOne({
+          where: {
+              email: req.body.email,
+          },
+      })
+      //만약에 userinfo에 해당 이메일 주소가 없다면,
+      if (!googleUserInfo) {
+          const createUser = await user.create({
+              email: email,
+              username: username,
+          })
+          res.status(200).send(createUser)
+      } else {
+          res.status(500).send({ message: '이미 가입된 유저입니다.' })
+      }
+   },
 
   // kakaologinController: async (req, res) => {
 

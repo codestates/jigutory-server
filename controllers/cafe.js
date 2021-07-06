@@ -17,7 +17,7 @@ module.exports = {
 
     cafelist: async (req, res) => {
       const getCafeInfo = await cafeinfo.findAll({
-        attributes: ['id', 'name', 'image', 'keyword','latitude', 'longitude']
+        attributes: ['id', 'name', 'image', 'address', 'keyword', 'type', 'telephone', 'latitude', 'longitude', 'etc']
     })
     res.status(200).send(getCafeInfo)
 }
