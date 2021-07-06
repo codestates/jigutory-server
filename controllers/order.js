@@ -32,5 +32,4 @@ module.exports = {
             return res.status(200).send(orderInfo)
         }
     },
-    orderController: async (req, res) => {},
-
+  }
