@@ -12,22 +12,23 @@ module.exports = (sequelize, DataTypes) => {
             // define association here
         }
     }
-    cafeinfo.init(
-        {
-            name: DataTypes.STRING,
-            image: DataTypes.STRING,
-            keyword: DataTypes.STRING,
-            latitude: DataTypes.DOUBLE,
-            longitude: DataTypes.DOUBLE,
-            address: DataTypes.STRING,
-            type: DataTypes.STRING,
-            telephone: DataTypes.STRING,
-            etc: DataTypes.STRING,
-        },
-        {
-            sequelize,
-            modelName: 'cafeinfo',
-        },
-    )
-    return cafeinfo
-}
+
+  };
+  cafeinfo.init({
+    name: DataTypes.STRING,
+    image: DataTypes.STRING,
+    keyword: DataTypes.STRING,
+    latitude: DataTypes.DOUBLE,
+    longitude: DataTypes.DOUBLE,
+    address: DataTypes.STRING,
+    type:DataTypes.STRING,
+    telephone:DataTypes.STRING,
+    etc:DataTypes.STRING,
+    link:DataTypes.STRING,
+  }, {
+    sequelize,
+    modelName: 'cafeinfo',
+  });
+  return cafeinfo;
+};
+
