@@ -18,12 +18,14 @@ module.exports = {
         //뱃지를 획득할 수 있는 조건을 클라에서 정의해서 그 조건에 맞았을 때 뱃지획득 버튼 활성화
         //  -> 클라의 조건과 아래 조건을 같게 함
         //그래서 그 버튼을 클릭 시 아래 코드 실행
-        const { carbonReduction, username } = req.body
+
+        const { carbonReduction, email } = req.body;
 
         const getCarbonInfo = await user.findOne({
             where: {
-                username: username,
-            },
+              email: email
+            }
+
         })
         if (carbonReduction > 500 && carbonReduction < 900) {
             const badgeOne = await badgeinfo.findOne({
