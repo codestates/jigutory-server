@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
         }
     }
 
-  };
+
   cafeinfo.init({
     name: DataTypes.STRING,
     image: DataTypes.STRING,
