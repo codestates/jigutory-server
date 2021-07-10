@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
   badge.init({
     clickNum: DataTypes.INTEGER,
     carbonReduction: DataTypes.INTEGER,
-    badgeInfo: DataTypes.STRING
+    levelNum: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'badge',
