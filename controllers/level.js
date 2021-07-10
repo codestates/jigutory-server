@@ -101,57 +101,57 @@ module.exports = {
             // 클릭 수에 따라 조건에 맞는 레벨 정보를 조회해서 전송
             // 레벨 1은 기본값으로 클라에서 저장
             if(levelStandard <= 10){
-                const levelOne = await levelinfo.findOne({
+                const level = await levelinfo.findOne({
                     where: { id: 1}
                 })
-                res.status(200).send({getUpdateInfo, levelOne})
+                res.status(200).send({getUpdateInfo, level})
             } else if(levelStandard > 10 && levelStandard <= 15){
-                const levelTwo = await levelinfo.findOne({
+                const level = await levelinfo.findOne({
                     where: { id: 2}
                 })
-                res.status(200).send({getUpdateInfo, levelTwo})
+                res.status(200).send({getUpdateInfo, level})
                 // 여기서 클라로 전송할 때는 클릭수, 탄소 외 레벨과 벳지의 정보도 같이 준다 (조건에 따라)
                 //res.status(200).send({getUpdateInfo, 레벨관련, 뱃지관련})
             } else if(levelStandard > 15 && levelStandard <= 25){
-                const levelThree = await levelinfo.findOne({
+                const level = await levelinfo.findOne({
                     where: { id: 3}
                 })
-                res.status(200).send({getUpdateInfo, levelThree})
+                res.status(200).send({getUpdateInfo, level})
             } else if(levelStandard > 25 && levelStandard <= 40){
-                const levelFour = await levelinfo.findOne({
+                const level = await levelinfo.findOne({
                     where: { id: 4}
                 })
-                res.status(200).send({getUpdateInfo, levelFour})
+                res.status(200).send({getUpdateInfo, level})
             } else if(levelStandard > 40 && levelStandard <= 60){
-                const levelFive = await levelinfo.findOne({
+                const level = await levelinfo.findOne({
                     where: { id: 5}
                 })
-                res.status(200).send({getUpdateInfo, levelFive})
+                res.status(200).send({getUpdateInfo, level})
             } else if(levelStandard > 60 && levelStandard <= 85){
-                const levelSix = await levelinfo.findOne({
+                const level = await levelinfo.findOne({
                     where: { id: 6}
                 })
-                res.status(200).send({getUpdateInfo, levelSix})
+                res.status(200).send({getUpdateInfo, level})
             } else if(levelStandard > 85 && levelStandard <= 115){
-                const levelSeven = await levelinfo.findOne({
+                const level = await levelinfo.findOne({
                     where: { id: 7}
                 })
-                res.status(200).send({getUpdateInfo, levelSeven})
+                res.status(200).send({getUpdateInfo, level})
             } else if(levelStandard > 115 && levelStandard <= 150){
-                const levelEight = await levelinfo.findOne({
+                const level = await levelinfo.findOne({
                     where: { id: 8}
                 })
-                res.status(200).send({getUpdateInfo, levelEight})
+                res.status(200).send({getUpdateInfo, level})
             } else if(levelStandard > 150 && levelStandard <= 190){
-                const levelNine = await levelinfo.findOne({
+                const level = await levelinfo.findOne({
                     where: { id: 9}
                 })
-                res.status(200).send({getUpdateInfo, levelNine})
+                res.status(200).send({getUpdateInfo, level})
             } else if(levelStandard > 190 && levelStandard <= 235){
-                const levelTen = await levelinfo.findOne({
+                const level = await levelinfo.findOne({
                     where: { id: 10}
                 })
-                res.status(200).send({getUpdateInfo, levelTen})
+                res.status(200).send({getUpdateInfo, level})
             }
         } else {
             res.status(400).send('에러입니다')

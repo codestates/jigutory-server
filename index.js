@@ -1,5 +1,5 @@
 const express = require("express");
-// const https = require('https');
+const https = require('https');
 const fs = require('fs');
 const cors = require('cors');
 const logger = require('morgan');
@@ -38,27 +38,27 @@ app.use('/cart', cartRouter);
 app.use('/order', orderRouter);
 app.use('/cafe', cafeRouter)
 
-module.exports = app.listen(port, () => {
-  console.log(`🚀 Server is starting on ${port}`);
-});
+// module.exports = app.listen(port, () => {
+//   console.log(`🚀 Server is starting on ${port}`);
+// });
 
 
 // http 프로토콜 대신 https 프로토콜을 사용 시 사용
-// let server;
+let server;
 
-// if (fs.existsSync("./key.pem") && fs.existsSync("./cert.pem")) {
-//   server = https
-//     .createServer(
-//       {
-//         key: fs.readFileSync(__dirname + `/` + 'key.pem', 'utf-8'),
-//         cert: fs.readFileSync(__dirname + `/` + 'cert.pem', 'utf-8'),
-//       },
-//       app
-//     )
-//     .listen(4000);
-// } else {
-//   server = app.listen(4000)
-// }
-// console.log(`🚀server listening on https && ${port}`)
+if (fs.existsSync("./key.pem") && fs.existsSync("./cert.pem")) {
+  server = https
+    .createServer(
+      {
+        key: fs.readFileSync(__dirname + `/` + 'key.pem', 'utf-8'),
+        cert: fs.readFileSync(__dirname + `/` + 'cert.pem', 'utf-8'),
+      },
+      app
+    )
+    .listen(4000);
+} else {
+  server = app.listen(4000)
+}
+console.log(`🚀server listening on https && ${port}`)
 
-// module.exports = server;
+module.exports = server;
