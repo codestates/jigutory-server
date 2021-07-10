@@ -1,19 +1,28 @@
-const { Op } = require("sequelize");
-const { QueryTypes } = require('sequelize');
-const db = require('../models/index');
-require("dotenv").config();
-const { user, product, order, levelinfo, cafeinfo, badgeInfo, badge } = require("../models");
-
+const { Op } = require('sequelize')
+const { QueryTypes } = require('sequelize')
+const db = require('../models/index')
+require('dotenv').config()
+const {
+    user,
+    product,
+    order,
+    levelinfo,
+    cafeinfo,
+    badgeinfo,
+    badge,
+} = require('../models')
 
 module.exports = {
     // 레벨에서 클릭 수와 탄소저감 수치 두개 다 db에 업데이트하고 클라로 전송
     // 뱃지에서는 단지 그 수치를 버튼을 클릭하든 뭘 해서 전달해주기만 하면 됨
 
     readController: async (req, res) => {
+
         const { clickNum, email } = req.body;
         const carbon = (num) =>  num * 25
 
         // users와 badges가 일대일로 연결된 스키마 가정 (badges에는 userId 외래키 있음)
+
         if(clickNum === 0){
             // 유저가 로그인해서 맨 처음에 클릭했을 때 작동 
             // req.body로 보내준 email으로 로그인한 유저의 정보를 가져옴
@@ -21,6 +30,7 @@ module.exports = {
                 where: {
                   email: email
                 }
+
             })
             console.log(findUser.dataValues.id)
        
@@ -31,10 +41,11 @@ module.exports = {
                 carbonReduction: carbon(clickNum + 1),
                 levelNum: 1,
                 userId: findUser.dataValues.id // 클릭한 유저의 id를 badesg userId 외래키로 넣어서 관계 연결
+
             })
             
             //console.log(submitBadge.dataValues.id)
-  
+
             // const submitUserBadge = await db.sequelize.query(
             //     `Insert into user_badge (userId, badgeId) values(?,?)`, {
             //       replacements: [submitBadge.dataValues.id, findUser.dataValues.id],
@@ -44,28 +55,30 @@ module.exports = {
             if(submitBadge && findUser){
                 // 유저 id에 해당하는 유저 정보, clickNum, carbonReduction, levelNum을 전송
                 // 클라는 전송된 정보를 화면에 출력
+
                 const getInfo = await badge.findOne({
                     attributes: ['clickNum', 'carbonReduction', 'levelNum'],
                     include: {
-                      model: user,
-                      where: {
-                        id : findUser.dataValues.id
-                      }
+                        model: user,
+                        where: {
+                            id: findUser.dataValues.id,
+                        },
                     },
                     where: {
-                        userId: findUser.dataValues.id
-                    }
-                });
-        
-                  if(getInfo){
+                        userId: findUser.dataValues.id,
+                    },
+                })
+
+                if (getInfo) {
                     res.status(200).send(getInfo)
-                  } else {
+                } else {
                     res.status(500).send('err')
-                  }
+                }
             }
 
         } else if(clickNum !== 0){
             // 마찬가지로 유저를 찾고
+
             const findUpdateUser = await user.findOne({
                 where: {
                   email: email
@@ -75,14 +88,14 @@ module.exports = {
             const findUpdateInfo = await badge.findOne({
                 attributes: ['clickNum', 'carbonReduction', 'levelNum'],
                 include: {
-                  model: user,
-                  where: {
-                    id : findUpdateUser.dataValues.id
-                  }
+                    model: user,
+                    where: {
+                        id: findUpdateUser.dataValues.id,
+                    },
                 },
                 where: {
-                    userId: findUpdateUser.dataValues.id
-                }
+                    userId: findUpdateUser.dataValues.id,
+                },
             })
             // console.log('clickNum :'+ findUpdateInfo.dataValues.clickNum)
             // console.log('levelNum :'+ findUpdateInfo.dataValues.levelNum)
@@ -149,6 +162,7 @@ module.exports = {
                     }
                 })
                 res.status(200).send(getUpdateInfo)
+
             }
         }   
         // 여기서 문제는, levelNum에 저장되어 있는 레벨은 단지 숫자일뿐 이 정보로 levelinfo의 레벨
@@ -311,5 +325,7 @@ module.exports = {
         } else {
             res.status(400).send('에러입니다')
         }
+
     }    
 }    
+

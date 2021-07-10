@@ -1,9 +1,16 @@
-const { Op } = require("sequelize");
-const { QueryTypes } = require('sequelize');
-const db = require('../models/index');
-require("dotenv").config();
-const { user, product, order, levelinfo, cafeinfo, badgeinfo, badge } = require("../models");
-
+const { Op } = require('sequelize')
+const { QueryTypes } = require('sequelize')
+const db = require('../models/index')
+require('dotenv').config()
+const {
+    user,
+    product,
+    order,
+    levelinfo,
+    cafeinfo,
+    badgeinfo,
+    badge,
+} = require('../models')
 
 module.exports = {
     // orderController: async (req, res) => {
@@ -25,5 +32,4 @@ module.exports = {
             return res.status(200).send(orderInfo)
         }
     },
-    orderController: async (req, res) => {},
-}    
+  }
