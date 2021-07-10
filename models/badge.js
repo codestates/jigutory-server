@@ -12,16 +12,16 @@ module.exports = (sequelize, DataTypes) => {
             badge.belongsTo(models.user)
         }
     }
-    badge.init(
-        {
-            clickNum: DataTypes.INTEGER,
-            carbonReduction: DataTypes.INTEGER,
-            badgeInfo: DataTypes.STRING,
-        },
-        {
-            sequelize,
-            modelName: 'badge',
-        },
-    )
-    return badge
-}
+
+  };
+  badge.init({
+    clickNum: DataTypes.INTEGER,
+    carbonReduction: DataTypes.INTEGER,
+    levelNum: DataTypes.INTEGER
+  }, {
+    sequelize,
+    modelName: 'badge',
+  });
+  return badge;
+};
+

@@ -15,7 +15,9 @@ const {
 const e = require('express')
 
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID
-const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET
+
+const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
+
 const SERVER_ROOT_URI = 'http://localhost:4000'
 const CLIENT_ROOT_URI = 'http://localhost:3000/user/signin'
 const REDIRECT_URI = '/auth/googlesignin'
