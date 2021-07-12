@@ -19,57 +19,66 @@ module.exports = {
         //  -> 클라의 조건과 아래 조건을 같게 함
         //그래서 그 버튼을 클릭 시 아래 코드 실행
 
-        const { carbonReduction, email } = req.body;
+        // const { carbonReduction, email } = req.body
 
-        const getCarbonInfo = await user.findOne({
-            where: {
-              email: email
-            }
+        // const getCarbonInfo = await user.findOne({
+        //     where: {
+        //         email: email,
+        //     },
+        // })
 
+        const badgeAll = await badgeinfo.findAll({
+            attributes: ['id', 'name', 'image', 'description'],
         })
-        if (carbonReduction > 500 && carbonReduction < 900) {
-            const badgeOne = await badgeinfo.findOne({
-                where: { id: 1 },
-            })
-            res.status(200).send({ getCarbonInfo, badgeOne })
-        } else if (carbonReduction > 900 && carbonReduction < 2000) {
-            const badgeTwo = await badgeinfo.findOne({
-                where: { id: 2 },
-            })
-            res.status(200).send({ getCarbonInfo, badgeOne, badgeTwo })
-        } else if (carbonReduction > 2000 && carbonReduction < 3500) {
-            const badgeThree = await badgeinfo.findOne({
-                where: { id: 3 },
-            })
-            res.status(200).send({
-                getCarbonInfo,
-                badgeOne,
-                badgeTwo,
-                badgeThree,
-            })
-        } else if (carbonReduction > 3500 && carbonReduction < 5000) {
-            const badgeFour = await badgeinfo.findOne({
-                where: { id: 4 },
-            })
-            res.status(200).send({
-                getCarbonInfo,
-                badgeOne,
-                badgeTwo,
-                badgeThree,
-                badgeFour,
-            })
-        } else if (carbonReduction > 5000) {
-            const badgeFive = await badgeinfo.findOne({
-                where: { id: 5 },
-            })
-            res.status(200).send({
-                getCarbonInfo,
-                badgeOne,
-                badgeTwo,
-                badgeThree,
-                badgeFour,
-                badgeFive,
-            })
-        }
+        res.status(200).send({ badgeAll })
     },
 }
+
+//     if (!carbonReduction) {
+
+//     }
+
+//     if (carbonReduction > 500 && carbonReduction < 900) {
+//         const badgeOne = await badgeinfo.findOne({
+//             where: { id: 1 },
+//         })
+//         res.status(200).send({ getCarbonInfo, badgeOne })
+//     } else if (carbonReduction > 900 && carbonReduction < 2000) {
+//         const badgeTwo = await badgeinfo.findOne({
+//             where: { id: 2 },
+//         })
+//         res.status(200).send({ getCarbonInfo, badgeOne, badgeTwo })
+//     } else if (carbonReduction > 2000 && carbonReduction < 3500) {
+//         const badgeThree = await badgeinfo.findOne({
+//             where: { id: 3 },
+//         })
+//         res.status(200).send({
+//             getCarbonInfo,
+//             badgeOne,
+//             badgeTwo,
+//             badgeThree,
+//         })
+//     } else if (carbonReduction > 3500 && carbonReduction < 5000) {
+//         const badgeFour = await badgeinfo.findOne({
+//             where: { id: 4 },
+//         })
+//         res.status(200).send({
+//             getCarbonInfo,
+//             badgeOne,
+//             badgeTwo,
+//             badgeThree,
+//             badgeFour,
+//         })
+//     } else if (carbonReduction > 5000) {
+//         const badgeFive = await badgeinfo.findOne({
+//             where: { id: 5 },
+//         })
+//         res.status(200).send({
+//             getCarbonInfo,
+//             badgeOne,
+//             badgeTwo,
+//             badgeThree,
+//             badgeFour,
+//             badgeFive,
+//         })
+//     }

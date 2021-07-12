@@ -16,19 +16,17 @@ module.exports = {
     // 레벨에서 클릭 수와 탄소저감 수치 두개 다 db에 업데이트하고 클라로 전송
     // 뱃지에서는 단지 그 수치를 버튼을 클릭하든 뭘 해서 전달해주기만 하면 됨
     readController: async (req, res) => {
-
-        const { clickNum, email } = req.body;
-        const carbon = (num) =>  num * 25
+        const { clickNum, email } = req.body
+        const carbon = (num) => num * 25
 
         // users와 badges가 일대일로 연결된 스키마 가정 (badges에는 userId 외래키 있음)
-        if (clickNum === 0) {
+        if (clickNum === 0 || clickNum === undefined) {
             // 유저가 로그인해서 맨 처음에 클릭했을 때 작동 -> badges 테이블에 유저의 데이터 생성
             // req.body로 보내준 email으로 로그인한 유저의 정보를 가져옴
             const findUser = await user.findOne({
                 where: {
-                  email: email
-                }
-
+                    email: email,
+                },
             })
             //console.log(findUser.dataValues.id)
             const submitBadge = await badge.create({
@@ -69,27 +67,29 @@ module.exports = {
         } else if (clickNum !== 0) {
             const findUpdateUser = await user.findOne({
                 where: {
-                  email: email
-                }
-            })    
-            // 처음 클릭 이후부터는 클릭한 유저의 정보를 가져와 기존에 생성한 badges를 업데이트하기만 하면 됨
-            await badge.update({
-                clickNum: clickNum + 1,
-                carbonReduction: carbon(clickNum + 1),
-            },{    
-            // },{   
-            //     include: [{
-            //         model: user,
-            //         where: {
-            //           id : findUpdateUser.dataValues.id
-            //         }
-            //     }],    
-            // },{
-                where: {
-                    userId: findUpdateUser.dataValues.id
-                }
-
+                    email: email,
+                },
             })
+            // 처음 클릭 이후부터는 클릭한 유저의 정보를 가져와 기존에 생성한 badges를 업데이트하기만 하면 됨
+            await badge.update(
+                {
+                    clickNum: clickNum + 1,
+                    carbonReduction: carbon(clickNum + 1),
+                },
+                {
+                    // },{
+                    //     include: [{
+                    //         model: user,
+                    //         where: {
+                    //           id : findUpdateUser.dataValues.id
+                    //         }
+                    //     }],
+                    // },{
+                    where: {
+                        userId: findUpdateUser.dataValues.id,
+                    },
+                },
+            )
             // 처음 클릭 이후부터는 클릭한 유저의 정보를 가져와 기존에 생성한 badges를 업데이트하기만 하면 됨
             await badge.update(
                 {
@@ -125,16 +125,16 @@ module.exports = {
             })
             console.log(getUpdateInfo)
 
-            const levelStandard = getUpdateInfo.dataValues.clickNum;
+            const levelStandard = getUpdateInfo.dataValues.clickNum
 
             //const badgeStandard = getUpdateInfo.carbonReduction;
 
             // 클릭 수에 따라 조건에 맞는 레벨 정보를 조회해서 전송
             // 레벨 1은 기본값으로 클라에서 저장
 
-            if(levelStandard <= 10){
+            if (levelStandard <= 10) {
                 res.status(200).send(getUpdateInfo)
-            } else if(levelStandard > 10 && levelStandard <= 15){
+            } else if (levelStandard > 10 && levelStandard <= 15) {
                 const levelTwo = await levelinfo.findOne({
                     where: { id: 2 },
                 })
