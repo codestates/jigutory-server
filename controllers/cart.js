@@ -55,7 +55,7 @@ module.exports = {
 
     deleteController: async (req, res) => {
     // 장바구니에서 상품을 지우는 코드
-        const { email } = req.body
+        const { email , id } = req.body
         const findDeleteUser = await user.findOne({
             where: {
                 email: email
@@ -63,7 +63,8 @@ module.exports = {
         })
         const findOrder = await order.findOne({
             where: {
-                userId: findDeleteUser.dataValues.id
+                userId: findDeleteUser.dataValues.id,
+                id: id
             }
         })
         await db.sequelize.query(
