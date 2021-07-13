@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
         static associate(models) {
             // define association here
             user.hasOne(models.badge, {
-                as: 'member',
+                as: 'user',
             })
             user.hasMany(models.order, {
                 foreignKey: 'userId',
@@ -31,5 +31,6 @@ module.exports = (sequelize, DataTypes) => {
             modelName: 'user',
         },
     )
+
     return user
 }

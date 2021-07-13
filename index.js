@@ -12,6 +12,7 @@ const productRouter = require('./routes/product')
 const cartRouter = require('./routes/cart')
 const orderRouter = require('./routes/order');
 const cafeRouter = require('./routes/cafe')
+const controller = require('./controllers/intropage');
 
 require("./models");
 const sequelize = require('./models').sequelize;
@@ -37,6 +38,7 @@ app.use('/product', productRouter);
 app.use('/cart', cartRouter);
 app.use('/order', orderRouter);
 app.use('/cafe', cafeRouter)
+app.get('/intropage', controller.intropageController);
 
 module.exports = app.listen(port, () => {
   console.log(`🚀 Server is starting on ${port}`);

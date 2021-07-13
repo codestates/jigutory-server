@@ -15,8 +15,8 @@ module.exports = {
       carbonReduction: {
         type: Sequelize.INTEGER
       },
-      badgeInfo: {
-        type: Sequelize.STRING
+      levelNum: {
+        type: Sequelize.INTEGER
       },
       createdAt: {
         allowNull: false,
