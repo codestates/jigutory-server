@@ -20,6 +20,7 @@ module.exports = {
       },
       profileImage: {
         type: Sequelize.TEXT
+
       },
       badge: {
         type: Sequelize.STRING

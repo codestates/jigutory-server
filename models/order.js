@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+'use strict'
+const { Model } = require('sequelize')
 module.exports = (sequelize, DataTypes) => {
   class order extends Model {
     /**
@@ -18,14 +16,16 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'userId'
       })
     }
-  };
-  order.init({
-    location: DataTypes.STRING,
-    message: DataTypes.STRING,
-    totalPrice: DataTypes.INTEGER
-  }, {
-    sequelize,
-    modelName: 'order',
-  });
-  return order;
-};
+    order.init(
+        {
+            location: DataTypes.STRING,
+            message: DataTypes.STRING,
+            totalPrice: DataTypes.INTEGER,
+        },
+        {
+            sequelize,
+            modelName: 'order',
+        },
+    )
+    return order
+}

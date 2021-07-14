@@ -16,6 +16,7 @@ const e = require('express')
 
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID
 
+
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 
 const SERVER_ROOT_URI = 'http://localhost:4000'
@@ -163,12 +164,31 @@ module.exports = {
       }
    },
 
-  // kakaologinController: async (req, res) => {
 
-  // },
+    googlesignUpController: async (req, res) => {
+        const { email, username } = req.body
+        const googleUserInfo = await user.findOne({
+            where: {
+                email: req.body.email,
+            },
+        })
+        //만약에 userinfo에 해당 이메일 주소가 없다면,
+        if (!googleUserInfo) {
+            const createUser = await user.create({
+                email: email,
+                username: username,
+            })
+            res.status(200).send(createUser)
+        } else {
+            res.status(500).send({ message: '이미 가입된 유저입니다.' })
+        }
+    },
 
-  // kakaosignupController: async (req, res) => {
+    // kakaologinController: async (req, res) => {
 
-  // },
-};
+    // },
 
+    // kakaosignupController: async (req, res) => {
+
+    // },
+}

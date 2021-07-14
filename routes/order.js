@@ -1,8 +1,6 @@
-const router = require('express').Router();
-const controller = require('../controllers/order');
+const router = require('express').Router()
+const controller = require('../controllers/order')
 
- 
-router.get('/list', controller.orderListController);
+router.get('/list', controller.orderListController)
 
-
-module.exports = router;
+module.exports = router

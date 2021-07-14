@@ -16,22 +16,29 @@ module.exports = {
     readController: async (req, res) => {
 
     //장바구니 이동 버튼 클릭 시 나의 장바구니 목록을 보는 코드 
+
         const { email } = req.body
         const findOrderUser = await user.findOne({
             where: {
-                email: email
-            }
+                email: email,
+            },
         })
         const showCart = await product.findAll({
             attributes: ['id', 'name', 'image', 'description', 'price'],
             include: {
                 model: order,
-                attributes: ['id', 'userId', 'location', 'message', 'totalPrice'],
+                attributes: [
+                    'id',
+                    'userId',
+                    'location',
+                    'message',
+                    'totalPrice',
+                ],
                 where: {
-                    userId: findOrderUser.dataValues.id
-                }
+                    userId: findOrderUser.dataValues.id,
+                },
             },
-            through: 'order_product'
+            through: 'order_product',
         })
         res.status(200).send(showCart)
 
@@ -46,7 +53,7 @@ module.exports = {
         //     },
         //     through: 'order_product'
         // })
-    },    
+    },
 
     updateController: async (req, res) => {
     // 클라에서 수량, 총금액 하면 여기는 딱히 필요가 없게 됨
@@ -80,8 +87,8 @@ module.exports = {
         const { email , id } = req.body
         const findDeleteUser = await user.findOne({
             where: {
-                email: email
-            }
+                email: email,
+            },
         })
         const findOrder = await order.findOne({
             where: {
@@ -90,16 +97,18 @@ module.exports = {
             }
         })
         await db.sequelize.query(
-            `Delete from order_product where orderId = ?`, {
+            `Delete from order_product where orderId = ?`,
+            {
                 replacements: [findOrder.dataValues.id],
-                type: QueryTypes.DELETE
-            }
+                type: QueryTypes.DELETE,
+            },
         )
         await order.destroy({
             where: {
                 location:id,
                 userId: findDeleteUser.id
             }
+
         })
         res.status(200).send('장바구니에서 삭제되었습니다')
     
@@ -123,3 +132,4 @@ module.exports = {
     }
 
 }
+

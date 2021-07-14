@@ -1,8 +1,6 @@
-const router = require('express').Router();
-const controller = require('../controllers/badge');
+const router = require('express').Router()
+const controller = require('../controllers/badge')
 
- 
-router.post('/read', controller.readController);
+router.post('/read', controller.readController)
 
-
-module.exports = router;
+module.exports = router
