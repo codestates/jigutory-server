@@ -102,13 +102,22 @@ module.exports = {
             // 레벨이 상승해야 하는 부분의 클릭 수에서는 레벨도 1씩 더해주고
             // 그게 아닌 경우에는 clickNum과 carbonReduction만 1씩 더해준다
 
-            if (
-                [10, 15, 25, 40, 60, 85, 115, 150, 190].includes(levelStandard)
-            ) {
+            if([10,15,25,40,60,85,115,150,190].includes(levelStandard)){
+                console.log('levelnum10 :' + levelStandard)
                 const findlevelNum = await badge.findOne({
                     where: {
-                        userId: findUpdateUser.dataValues.id,
-                    },
+                        userId: findUpdateUser.dataValues.id
+                    }
+                })
+                console.log(findlevelNum.dataValues.levelNum)
+                await badge.update({
+                    clickNum: clickNum + 1,
+                    carbonReduction: carbon(clickNum + 1),
+                    levelNum: findlevelNum.dataValues.levelNum + 1
+                },{    
+                    where: {
+                        userId: findUpdateUser.dataValues.id
+                    }
                 })
                 await badge.update(
                     {
@@ -134,12 +143,24 @@ module.exports = {
                         userId: findUpdateUser.dataValues.id,
                     },
                 })
+                console.log(getUpdateInfo)
                 res.status(200).send(getUpdateInfo)
             } else {
+                console.log(levelStandard)
                 const findlevelNum = await badge.findOne({
                     where: {
-                        userId: findUpdateUser.dataValues.id,
-                    },
+                        userId: findUpdateUser.dataValues.id
+                    }
+                })
+                console.log(findlevelNum.dataValues.levelNum)
+                await badge.update({
+                    clickNum: clickNum + 1,
+                    carbonReduction: carbon(clickNum + 1),
+                    levelNum: findlevelNum.dataValues.levelNum
+                },{    
+                    where: {
+                        userId: findUpdateUser.dataValues.id
+                    }
                 })
                 await badge.update(
                     {

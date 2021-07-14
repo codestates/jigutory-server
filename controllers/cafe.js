@@ -15,21 +15,11 @@ const {
 
 module.exports = {
     cafelist: async (req, res) => {
-        const getCafeInfo = await cafeinfo.findAll({
-            attributes: [
-                'id',
-                'name',
-                'image',
-                'address',
-                'keyword',
-                'type',
-                'telephone',
-                'latitude',
-                'longitude',
-                'etc',
-                'link',
-            ],
-        })
-        res.status(200).send(getCafeInfo)
-    },
+
+      const getCafeInfo = await cafeinfo.findAll({
+        attributes: ['id', 'name', 'image', 'address', 'keyword', 'type', 'telephone', 'latitude', 'longitude', 'etc', 'link']
+    })
+    res.status(200).send(getCafeInfo)
+}
+
 }

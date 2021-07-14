@@ -15,7 +15,25 @@ module.exports = {
       image: {
         type: Sequelize.STRING
       },
-      description: {
+      keyword: {
+        type: Sequelize.STRING
+      },
+      latitude: {
+        type: Sequelize.DOUBLE
+      },
+      longitude: {
+        type: Sequelize.DOUBLE
+      },
+      address: {
+        type: Sequelize.STRING
+      },
+      type: {
+        type: Sequelize.STRING
+      },
+      telephone: {
+        type: Sequelize.STRING
+      },
+      etc: {
         type: Sequelize.STRING
       },
       createdAt: {
