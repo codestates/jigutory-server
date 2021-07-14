@@ -55,6 +55,28 @@ module.exports = {
 
     updateController: async (req, res) => {
         // 클라에서 수량, 총금액 하면 여기는 딱히 필요가 없게 됨
+        const { email, quantitiy, id, price } = req.body
+
+        const findUpdateUser = await user.findOne({
+            where: {
+                email: email,
+            },
+        })
+
+        const updateQuantitiy = await order.update(
+            {
+                message: quantitiy,
+                totalPrice: price,
+            },
+            {
+                where: {
+                    location: id,
+                    userId: findUpdateUser.id,
+                },
+            },
+        )
+
+        return res.status(200).send(updateQuantitiy)
     },
 
     deleteController: async (req, res) => {
@@ -67,8 +89,8 @@ module.exports = {
         })
         const findOrder = await order.findOne({
             where: {
-                userId: findDeleteUser.dataValues.id,
-                id: id,
+                userId: findDeleteUser.id,
+                location: id,
             },
         })
         await db.sequelize.query(
@@ -80,9 +102,27 @@ module.exports = {
         )
         await order.destroy({
             where: {
-                userId: findDeleteUser.dataValues.id,
+                location: id,
+                userId: findDeleteUser.id,
             },
         })
         res.status(200).send('장바구니에서 삭제되었습니다')
+    },
+
+    countController: async (req, res) => {
+        const { email } = req.body
+
+        const findCountUser = await user.findOne({
+            where: {
+                email: email,
+            },
+        })
+
+        const findCount = await order.findAndCountAll({
+            where: {
+                userId: findCountUser.id,
+            },
+        })
+        res.status(200).send({ findCount })
     },
 }
