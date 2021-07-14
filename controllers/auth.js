@@ -15,13 +15,14 @@ const {
 const e = require('express')
 
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID
+
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
+
 const SERVER_ROOT_URI = 'http://localhost:4000'
 const CLIENT_ROOT_URI = 'http://localhost:3000/user/signin'
 const REDIRECT_URI = '/auth/googlesignin'
 
 module.exports = {
-
     loginController: async (req, res) => {
         const { email, password } = req.body
         if (!email || !password) {
@@ -65,7 +66,6 @@ module.exports = {
                 .send({ message: '회원정보를 모두 입력하세요.' })
         }
 
-
         const [signUpUser, created] = await user.findOrCreate({
             where: { email },
             defaults: { username, email, password },
@@ -80,68 +80,68 @@ module.exports = {
         }
     },
 
-
   googleloginController: async (req, res) => {
-
     //클라이언트에서 response.profileObject의 내용 중 해당하는 부분만 주면
-    const { username, email } = req.body;  // username은 email의 앞부분
-    const googleToken = req.headers.authorization;
-
+    const { email, username } = req.body;  // username은 email의 앞부분
+    const googleToken = req.headers.authorization.split(' ')[0]//const googleToken = req.headers.authorization
     // db에 저장되어 있는지 조회
-    if(googleToken){
-        const googleInfo = await user.findOne({ 
-            where: {
-                username: username,
-                email: email,
-            }
-        })
-        if(!googleInfo){
-            const createInfo = await user.create({
-                username: username,
-                email: email,
-                password: email+process.env.GOOGLE_CLIENT_SECRET
-            }) 
-            const accessToken = jwt.sign(
-                { id: createInfo.id, email: createInfo.email },
-                process.env.ACCESS_SECRET,
-                {
-                    expiresIn: '1h',
-                },
-            )
-            const refreshToken = jwt.sign(
-                { id: createInfo.id, email: createInfo.email },
-                process.env.REFRESH_SECRET,
-                {
-                    expiresIn: '30d',
-                },
-            )
-            return res.status(200).send({
-                data: { accessToken: accessToken, refreshToken: refreshToken },
-                message: '로그인 되었습니다.',
-            })
-        } else if(googleInfo){
-            const accessToken = jwt.sign(
-                { id: googleInfo.id, email: googleInfo.email },
-                process.env.ACCESS_SECRET,
-                {
-                    expiresIn: '1h',
-                },
-            )
-            const refreshToken = jwt.sign(
-                { id: googleInfo.id, email: googleInfo.email },
-                process.env.REFRESH_SECRET,
-                {
-                    expiresIn: '30d',
-                },
-            )
-            res.status(200).send({
-                data: { accessToken: accessToken, refreshToken: refreshToken },
-                message: '로그인 되었습니다.',
-            })
+    const googleInfo = await user.findOne({ 
+        where: {
+            email: email,
         }
-    } else if(!googleToken){
-        res.status(500).send('구글 사용자가 아닙니다')
-    }    
+    })
+    if (googleInfo) {
+        const accessTokenGoogle = jwt.sign(
+            { id: googleInfo.id, email: googleInfo.email },
+            process.env.ACCESS_SECRET,
+            {
+                expiresIn: '1h',
+            },
+        )
+        const refreshTokenGoogle = jwt.sign(
+            { id: googleInfo.id, email: googleInfo.email },
+            process.env.REFRESH_SECRET,
+            {
+                expiresIn: '30d',
+            },
+        )
+
+        res.status(200).send({
+            accessTokenGoogle,
+            refreshTokenGoogle,
+            googleInfo,
+        })
+    } else if (!googleInfo) {
+        const createInfo = await user.create({
+            username: username,
+            email: email,
+        })
+
+        const accessTokenGoogle = jwt.sign(
+            { id: createInfo.id, email: createInfo.email },
+            process.env.ACCESS_SECRET,
+            {
+                expiresIn: '1h',
+            },
+        )
+        const refreshTokenGoogle = jwt.sign(
+            { id: createInfo.id, email: createInfo.email },
+            process.env.REFRESH_SECRET,
+            {
+                expiresIn: '30d',
+            },
+        )
+        return res.status(200).send({
+            data: {
+                createInfo,
+                accessToken: accessTokenGoogle,
+                refreshToken: refreshTokenGoogle,
+            },
+            message: '구글로그인 되었습니다.',
+        })
+    } else {
+        res.status(500).send('err')
+    }
   },
   
    googlesignUpController: async (req, res) => {

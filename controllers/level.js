@@ -94,11 +94,13 @@ module.exports = {
             // 그게 아닌 경우에는 clickNum과 carbonReduction만 1씩 더해준다
 
             if([10,15,25,40,60,85,115,150,190].includes(levelStandard)){
+                console.log('levelnum10 :' + levelStandard)
                 const findlevelNum = await badge.findOne({
                     where: {
                         userId: findUpdateUser.dataValues.id
                     }
                 })
+                console.log(findlevelNum.dataValues.levelNum)
                 await badge.update({
                     clickNum: clickNum + 1,
                     carbonReduction: carbon(clickNum + 1),
@@ -120,13 +122,16 @@ module.exports = {
                         userId: findUpdateUser.dataValues.id
                     }
                 })
+                console.log(getUpdateInfo)
                 res.status(200).send(getUpdateInfo)
             } else {
+                console.log(levelStandard)
                 const findlevelNum = await badge.findOne({
                     where: {
                         userId: findUpdateUser.dataValues.id
                     }
                 })
+                console.log(findlevelNum.dataValues.levelNum)
                 await badge.update({
                     clickNum: clickNum + 1,
                     carbonReduction: carbon(clickNum + 1),

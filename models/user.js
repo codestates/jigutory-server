@@ -17,14 +17,13 @@ module.exports = (sequelize, DataTypes) => {
       user.hasMany(models.order, {
         foreignKey: 'userId'
       })
-
     }
   };
   user.init({
     username: DataTypes.STRING,
     email: DataTypes.STRING,
     password: DataTypes.STRING,
-    profileImage: DataTypes.STRING,
+    profileImage: DataTypes.TEXT,
     badge: DataTypes.STRING,
     level: DataTypes.STRING
   }, {

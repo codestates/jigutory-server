@@ -1,9 +1,16 @@
-const { Op } = require("sequelize");
-const { QueryTypes } = require('sequelize');
-const db = require('../models/index');
-require("dotenv").config();
-const { user, product, order, levelinfo, cafeinfo, badgeinfo, badge } = require("../models");
-
+const { Op } = require('sequelize')
+const { QueryTypes } = require('sequelize')
+const db = require('../models/index')
+require('dotenv').config()
+const {
+    user,
+    product,
+    order,
+    levelinfo,
+    cafeinfo,
+    badgeinfo,
+    badge,
+} = require('../models')
 
 module.exports = {
 
@@ -57,24 +64,35 @@ module.exports = {
             // const findOrder = await order.findOne({
             //     where: { userId: findOrderUser.dataValues.id }
             // })
-            const findProduct = await product.findOne({
-                where: { id: productId }
+            const findProduct = await order.findOne({
+                where: { location: productId,
+                         userId : findOrderUser.id}
             })
-            const addOrder = await order.create({
-                userId: findOrderUser.dataValues.id,
-                location: null,
-                message: null,
-                totalPrice: null
-            })
-            await db.sequelize.query(
-                `Insert into order_product (orderId, productId) values(?,?)`, {
-                    replacements: [addOrder.dataValues.id, findProduct.dataValues.id],
-                    type: QueryTypes.INSERT
-                }
-            )
-            res.status(200).send('장바구니에 추가되었습니다')
-        } else {
-            res.status(500).send('에러')
-        }
+            if(findProduct){
+                res.status(200).send( {message: '이미 장바구니에 있는 물건입니다. 장바구니로 이동하시겠습니까?'})
+            }else{
+
+                const selectedProduct = await product.findOne({
+                    where: {
+                        id: productId
+                    }
+                })
+
+                const addOrder = await order.create({
+                    userId: findOrderUser.dataValues.id,
+                    location: selectedProduct.id,
+                    message: 1,
+                    totalPrice: selectedProduct.price
+                })
+                await db.sequelize.query(
+                    `Insert into order_product (orderId, productId) values(?,?)`, {
+                        replacements: [addOrder.dataValues.id, selectedProduct.dataValues.id],
+                        type: QueryTypes.INSERT
+                    }
+                )
+                res.status(200).send( {message:'장바구니에 추가되었습니다'})
+            } 
+
+            }
     },
-}    
+}      
