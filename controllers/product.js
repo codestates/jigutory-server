@@ -64,34 +64,37 @@ module.exports = {
             //     where: { userId: findOrderUser.dataValues.id }
             // })
             const findProduct = await order.findOne({
-                where: { location: productId,
-                         userId : findOrderUser.id}
+                where: { location: productId, userId: findOrderUser.id },
             })
-            if(findProduct){
-                res.status(200).send( {message: '이미 장바구니에 있는 물건입니다.'})
-            }else{
-
+            if (findProduct) {
+                res.status(200).send({
+                    message: '이미 장바구니에 있는 물건입니다.',
+                })
+            } else {
                 const selectedProduct = await product.findOne({
                     where: {
-                        id: productId
-                    }
+                        id: productId,
+                    },
                 })
 
                 const addOrder = await order.create({
                     userId: findOrderUser.dataValues.id,
                     location: selectedProduct.id,
                     message: 1,
-                    totalPrice: selectedProduct.price
+                    totalPrice: selectedProduct.price,
                 })
                 await db.sequelize.query(
-                    `Insert into order_product (orderId, productId) values(?,?)`, {
-                        replacements: [addOrder.dataValues.id, selectedProduct.dataValues.id],
-                        type: QueryTypes.INSERT
-                    }
+                    `Insert into order_product (orderId, productId) values(?,?)`,
+                    {
+                        replacements: [
+                            addOrder.dataValues.id,
+                            selectedProduct.dataValues.id,
+                        ],
+                        type: QueryTypes.INSERT,
+                    },
                 )
-                res.status(200).send( {message:'장바구니에 추가되었습니다'})
-            } 
-
+                res.status(200).send({ message: '장바구니에 추가되었습니다' })
             }
+        }
     },
-}    
+}
