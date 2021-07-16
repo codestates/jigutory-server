@@ -105,11 +105,25 @@ module.exports = {
             if (
                 [10, 15, 25, 40, 60, 85, 115, 150, 190].includes(levelStandard)
             ) {
+                console.log('levelnum10 :' + levelStandard)
                 const findlevelNum = await badge.findOne({
                     where: {
                         userId: findUpdateUser.dataValues.id,
                     },
                 })
+                console.log(findlevelNum.dataValues.levelNum)
+                await badge.update(
+                    {
+                        clickNum: clickNum + 1,
+                        carbonReduction: carbon(clickNum + 1),
+                        levelNum: findlevelNum.dataValues.levelNum + 1,
+                    },
+                    {
+                        where: {
+                            userId: findUpdateUser.dataValues.id,
+                        },
+                    },
+                )
                 await badge.update(
                     {
                         clickNum: clickNum + 1,
@@ -134,13 +148,28 @@ module.exports = {
                         userId: findUpdateUser.dataValues.id,
                     },
                 })
+                console.log(getUpdateInfo)
                 res.status(200).send(getUpdateInfo)
             } else {
+                console.log(levelStandard)
                 const findlevelNum = await badge.findOne({
                     where: {
                         userId: findUpdateUser.dataValues.id,
                     },
                 })
+                console.log(findlevelNum.dataValues.levelNum)
+                await badge.update(
+                    {
+                        clickNum: clickNum + 1,
+                        carbonReduction: carbon(clickNum + 1),
+                        levelNum: findlevelNum.dataValues.levelNum,
+                    },
+                    {
+                        where: {
+                            userId: findUpdateUser.dataValues.id,
+                        },
+                    },
+                )
                 await badge.update(
                     {
                         clickNum: clickNum + 1,
