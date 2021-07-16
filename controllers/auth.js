@@ -148,27 +148,26 @@ module.exports = {
             res.status(500).send('err')
         }
     },
+    // googlesignUpController: async (req, res) => {
+    //     const { email, username } = req.body
+    //     const googleUserInfo = await user.findOne({
+    //         where: {
+    //             email: req.body.email,
+    //         },
+    //     })
+    //     //만약에 userinfo에 해당 이메일 주소가 없다면,
+    //     if (!googleUserInfo) {
+    //         const createUser = await user.create({
+    //             email: email,
+    //             username: username,
+    //         })
+    //         res.status(200).send(createUser)
+    //     } else {
+    //         res.status(500).send({ message: '이미 가입된 유저입니다.' })
+    //     }
+    // },
 
-    googlesignUpController: async (req, res) => {
-        const { email, username } = req.body
-        const googleUserInfo = await user.findOne({
-            where: {
-                email: req.body.email,
-            },
-        })
-        //만약에 userinfo에 해당 이메일 주소가 없다면,
-        if (!googleUserInfo) {
-            const createUser = await user.create({
-                email: email,
-                username: username,
-            })
-            res.status(200).send(createUser)
-        } else {
-            res.status(500).send({ message: '이미 가입된 유저입니다.' })
-        }
-    },
+    // kakaologinController: async (req, res) => {},
 
-    kakaologinController: async (req, res) => {},
-
-    kakaosignupController: async (req, res) => {},
+    // kakaosignupController: async (req, res) => {},
 }
