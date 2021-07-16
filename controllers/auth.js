@@ -91,14 +91,14 @@ module.exports = {
             },
         })
         if (googleInfo) {
-            const accessTokenGoogle = jwt.sign(
+            const accessToken = jwt.sign(
                 { id: googleInfo.id, email: googleInfo.email },
                 process.env.ACCESS_SECRET,
                 {
                     expiresIn: '1h',
                 },
             )
-            const refreshTokenGoogle = jwt.sign(
+            const refreshToken = jwt.sign(
                 { id: googleInfo.id, email: googleInfo.email },
                 process.env.REFRESH_SECRET,
                 {
@@ -107,8 +107,8 @@ module.exports = {
             )
 
             res.status(200).send({
-                accessTokenGoogle,
-                refreshTokenGoogle,
+                accessToken,
+                refreshToken,
                 googleInfo,
             })
         } else if (!googleInfo) {
@@ -118,63 +118,56 @@ module.exports = {
                 password: `${email}+${username}`,
                 profileImage: profileImage,
             })
-            const findGoogleUser = await user.findOne({
+            const googleInfo = await user.findOne({
                 where: {
                     email: email,
                 },
             })
-            console.log(findGoogleUser.id)
-            const accessTokenGoogle = jwt.sign(
-                { id: findGoogleUser.id, email: findGoogleUser.email },
+            console.log(googleInfo.id)
+            const accessToken = jwt.sign(
+                { id: googleInfo.id, email: googleInfo.email },
                 process.env.ACCESS_SECRET,
                 {
                     expiresIn: '1h',
                 },
             )
-            const refreshTokenGoogle = jwt.sign(
-                { id: findGoogleUser.id, email: findGoogleUser.email },
+            const refreshToken = jwt.sign(
+                { id: googleInfo.id, email: googleInfo.email },
                 process.env.REFRESH_SECRET,
                 {
                     expiresIn: '30d',
                 },
             )
             return res.status(200).send({
-                data: {
-                    findGoogleUser,
-                    accessToken: accessTokenGoogle,
-                    refreshToken: refreshTokenGoogle,
-                },
+                googleInfo,
+                accessToken: accessToken,
+                refreshToken: refreshToken,
                 message: '구글로그인 되었습니다.',
             })
         } else {
             res.status(500).send('err')
         }
     },
-
-    googlesignUpController: async (req, res) => {
-        const { email, username } = req.body
-        const googleUserInfo = await user.findOne({
-            where: {
-                email: req.body.email,
-            },
-        })
-        //만약에 userinfo에 해당 이메일 주소가 없다면,
-        if (!googleUserInfo) {
-            const createUser = await user.create({
-                email: email,
-                username: username,
-            })
-            res.status(200).send(createUser)
-        } else {
-            res.status(500).send({ message: '이미 가입된 유저입니다.' })
-        }
-    },
-
-    // kakaologinController: async (req, res) => {
-
+    // googlesignUpController: async (req, res) => {
+    //     const { email, username } = req.body
+    //     const googleUserInfo = await user.findOne({
+    //         where: {
+    //             email: req.body.email,
+    //         },
+    //     })
+    //     //만약에 userinfo에 해당 이메일 주소가 없다면,
+    //     if (!googleUserInfo) {
+    //         const createUser = await user.create({
+    //             email: email,
+    //             username: username,
+    //         })
+    //         res.status(200).send(createUser)
+    //     } else {
+    //         res.status(500).send({ message: '이미 가입된 유저입니다.' })
+    //     }
     // },
 
-    // kakaosignupController: async (req, res) => {
+    // kakaologinController: async (req, res) => {},
 
-    // },
+    // kakaosignupController: async (req, res) => {},
 }
