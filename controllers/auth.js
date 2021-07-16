@@ -91,14 +91,14 @@ module.exports = {
             },
         })
         if (googleInfo) {
-            const accessTokenGoogle = jwt.sign(
+            const accessToken = jwt.sign(
                 { id: googleInfo.id, email: googleInfo.email },
                 process.env.ACCESS_SECRET,
                 {
                     expiresIn: '1h',
                 },
             )
-            const refreshTokenGoogle = jwt.sign(
+            const refreshToken = jwt.sign(
                 { id: googleInfo.id, email: googleInfo.email },
                 process.env.REFRESH_SECRET,
                 {
@@ -107,8 +107,8 @@ module.exports = {
             )
 
             res.status(200).send({
-                accessTokenGoogle,
-                refreshTokenGoogle,
+                accessToken,
+                refreshToken,
                 googleInfo,
             })
         } else if (!googleInfo) {
@@ -118,32 +118,30 @@ module.exports = {
                 password: `${email}+${username}`,
                 profileImage: profileImage,
             })
-            const findGoogleUser = await user.findOne({
+            const googleInfo = await user.findOne({
                 where: {
                     email: email,
                 },
             })
-            console.log(findGoogleUser.id)
-            const accessTokenGoogle = jwt.sign(
-                { id: findGoogleUser.id, email: findGoogleUser.email },
+            console.log(googleInfo.id)
+            const accessToken = jwt.sign(
+                { id: googleInfo.id, email: googleInfo.email },
                 process.env.ACCESS_SECRET,
                 {
                     expiresIn: '1h',
                 },
             )
-            const refreshTokenGoogle = jwt.sign(
-                { id: findGoogleUser.id, email: findGoogleUser.email },
+            const refreshToken = jwt.sign(
+                { id: googleInfo.id, email: googleInfo.email },
                 process.env.REFRESH_SECRET,
                 {
                     expiresIn: '30d',
                 },
             )
             return res.status(200).send({
-                data: {
-                    findGoogleUser,
-                    accessToken: accessTokenGoogle,
-                    refreshToken: refreshTokenGoogle,
-                },
+                googleInfo,
+                accessToken: accessToken,
+                refreshToken: refreshToken,
                 message: '구글로그인 되었습니다.',
             })
         } else {
@@ -170,11 +168,7 @@ module.exports = {
         }
     },
 
-    // kakaologinController: async (req, res) => {
+    kakaologinController: async (req, res) => {},
 
-    // },
-
-    // kakaosignupController: async (req, res) => {
-
-    // },
+    kakaosignupController: async (req, res) => {},
 }
