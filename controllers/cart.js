@@ -84,33 +84,20 @@ module.exports = {
 
     deleteController: async (req, res) => {
     // 장바구니에서 상품을 지우는 코드
-        const { email , id } = req.body
+        const { email , productid } = req.body;
+        console.log(email)
         const findDeleteUser = await user.findOne({
             where: {
                 email: email,
             },
         })
-        const findOrder = await order.findOne({
+        const destroyOrder = await order.destroy({
             where: {
-                userId: findDeleteUser.id,
-                location: id
+                location:productid,
+                userId:findDeleteUser.id
             }
         })
-        await db.sequelize.query(
-            `Delete from order_product where orderId = ?`,
-            {
-                replacements: [findOrder.dataValues.id],
-                type: QueryTypes.DELETE,
-            },
-        )
-        await order.destroy({
-            where: {
-                location:id,
-                userId: findDeleteUser.id
-            }
-
-        })
-        res.status(200).send('장바구니에서 삭제되었습니다')
+        res.status(200).send({message:'장바구니에서 삭제 되었습니다'})
     
     },
 
@@ -121,6 +108,7 @@ module.exports = {
             where: {
                 email: email
             }
+
         })
 
         const findCount = await order.findAndCountAll({

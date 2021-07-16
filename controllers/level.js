@@ -1,16 +1,9 @@
-const { Op } = require('sequelize')
-const { QueryTypes } = require('sequelize')
-const db = require('../models/index')
-require('dotenv').config()
-const {
-    user,
-    product,
-    order,
-    levelinfo,
-    cafeinfo,
-    badgeinfo,
-    badge,
-} = require('../models')
+const { Op } = require("sequelize");
+const { QueryTypes } = require('sequelize');
+const db = require('../models/index');
+require("dotenv").config();
+const { user, product, order, levelinfo, cafeinfo, badgeinfo, badge } = require("../models");
+
 
 module.exports = {
     // 레벨에서 클릭 수와 탄소저감 수치 두개 다 db에 업데이트하고 클라로 전송
@@ -42,7 +35,7 @@ module.exports = {
             })
 
             //console.log(submitBadge.dataValues.id)
-
+  
             // const submitUserBadge = await db.sequelize.query(
             //     `Insert into user_badge (userId, badgeId) values(?,?)`, {
             //       replacements: [submitBadge.dataValues.id, findUser.dataValues.id],
@@ -56,21 +49,21 @@ module.exports = {
                 const getInfo = await badge.findOne({
                     attributes: ['clickNum', 'carbonReduction', 'levelNum'],
                     include: {
-                        model: user,
-                        where: {
-                            id: findUser.dataValues.id,
-                        },
+                      model: user,
+                      where: {
+                        id : findUser.dataValues.id
+                      }
                     },
                     where: {
-                        userId: findUser.dataValues.id,
-                    },
-                })
-
-                if (getInfo) {
+                        userId: findUser.dataValues.id
+                    }
+                });
+        
+                  if(getInfo){
                     res.status(200).send(getInfo)
-                } else {
+                  } else {
                     res.status(500).send('err')
-                }
+                  }
             }
         } else if (clickNum !== 0) {
             // 마찬가지로 유저를 찾고
@@ -84,14 +77,14 @@ module.exports = {
             const findUpdateInfo = await badge.findOne({
                 attributes: ['clickNum', 'carbonReduction', 'levelNum'],
                 include: {
-                    model: user,
-                    where: {
-                        id: findUpdateUser.dataValues.id,
-                    },
+                  model: user,
+                  where: {
+                    id : findUpdateUser.dataValues.id
+                  }
                 },
                 where: {
-                    userId: findUpdateUser.dataValues.id,
-                },
+                    userId: findUpdateUser.dataValues.id
+                }
             })
             // console.log('clickNum :'+ findUpdateInfo.dataValues.clickNum)
             // console.log('levelNum :'+ findUpdateInfo.dataValues.levelNum)
@@ -345,5 +338,6 @@ module.exports = {
         } else {
             res.status(400).send('에러입니다')
         }
-    },
-}
+    
+    },    
+}    

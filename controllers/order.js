@@ -34,9 +34,17 @@ module.exports = {
         const orderInfo = await order.findAll({
               where: { userId:findOrder.dataValues.id },
           })
+<<<<<<< HEAD
+
+          return res.status(200).send(orderInfo)
+      // }
+  },
+}
+=======
 
           return res.status(200).send(orderInfo)
       // }
   },
 }
 
+>>>>>>> 1dcd737cd272880f20f3ebf18b5983ae95abadf5

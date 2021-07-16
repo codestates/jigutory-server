@@ -19,8 +19,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       profileImage: {
-        type: Sequelize.TEXT
-
+        type: Sequelize.LONGTEXT,
       },
       badge: {
         type: Sequelize.STRING
