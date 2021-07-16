@@ -8,4 +8,4 @@ router.post('/update', controller.updateController);
 router.delete('/delete', controller.deleteController);
 
 
-module.exports = router;
+module.exports = router

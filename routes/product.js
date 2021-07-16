@@ -1,10 +1,7 @@
-const router = require('express').Router();
-const controller = require('../controllers/product');
+const router = require('express').Router()
+const controller = require('../controllers/product')
 
- 
 // router.get('/info', controller.infoController);
-router.post('/list', controller.listController);
+router.post('/list', controller.listController)
 
-
-
-module.exports = router;
+module.exports = router
