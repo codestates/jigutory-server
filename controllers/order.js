@@ -32,9 +32,11 @@ module.exports = {
             },
         })
         const orderInfo = await order.findAll({
-            where: { userId: findOrder.dataValues.id },
-        })
-        return res.status(200).send(orderInfo)
-        // }
-    },
+              where: { userId:findOrder.dataValues.id },
+          })
+
+          return res.status(200).send(orderInfo)
+      // }
+  },
 }
+
