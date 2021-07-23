@@ -34,8 +34,8 @@
 
 
 ## 👀 Web View
-각 기능별 gif 파일 정리
-
+직접 서비스에 접속하셔서 생생하게 확인해보세요!!! 
+### 🚀 **[지구토리로 출발!!!](http://www.jigutory.com)**
 
 ## ⭐️ Team
 
@@ -54,3 +54,4 @@
 
 ## ✍🏻 For More Details
 ### [Wiki 링크로 이동](https://github.com/codestates/jigutory-client/wiki)
+
