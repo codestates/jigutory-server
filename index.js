@@ -18,12 +18,12 @@ const sequelize = require('./models').sequelize;
 const app = express();
 
 sequelize.sync();
-const port = 4000;
+const port = 80;
 
 app.use(express.json()); 
 app.use(express.urlencoded({ extended: false }));
 app.use(cors({
-  origin: ['http://localhost:3000'],
+  origin: true,
   methods: ['GET, POST, OPTIONS, PUT, PATCH, DELETE'],
   credentials: true
 }));
@@ -59,6 +59,6 @@ if (fs.existsSync("./key.pem") && fs.existsSync("./cert.pem")) {
 } else {
   server = app.listen(4000)
 }
-console.log(`🚀server listening on https && ${port}`)
+console.log(`🚀server listening on  && ${port}`)
 
 module.exports = server;
